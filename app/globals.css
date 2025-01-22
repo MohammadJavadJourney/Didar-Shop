@@ -27,7 +27,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --ring: var(--primary);
-    --radius: 0.75rem;
+    --radius: 1rem;
   }
   .dark {
     --background: 222.2 84% 4.9%;
@@ -55,7 +55,6 @@
 @layer base {
   * {
     @apply border-border;
-    @apply transition-colors duration-300;
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
@@ -79,18 +78,50 @@ body {
     @apply bg-gradient-to-r from-primary via-primary/80 to-primary bg-clip-text text-transparent;
   }
 
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
+  .bg-gradient {
+    @apply bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70;
   }
 
-  .animate-pulse-glow {
-    animation: pulse-glow 2s ease-in-out infinite;
+  .border-gradient {
+    @apply border-2 border-primary/20 hover:border-primary/40;
   }
 
-  .gradient-shift {
-    @apply bg-gradient-to-r from-primary via-primary/60 to-primary bg-[length:200%_200%];
-    animation: gradient-shift 3s ease infinite;
+  .card-hover {
+    @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:shadow-primary/5;
   }
+
+  .section-padding {
+    @apply py-32;
+  }
+
+  .section-backdrop {
+    @apply absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background;
+  }
+
+  .floating-backdrop {
+    @apply absolute w-[500px] h-[500px] rounded-full blur-3xl opacity-50 transition-opacity duration-300;
+  }
+}
+
+/* Theme transition */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 2;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 2;
+}
+.dark::view-transition-new(root) {
+  z-index: 1;
 }
 
 /* Custom animations */
@@ -140,4 +171,14 @@ body {
 .swiper-button-prev {
   left: auto !important;
   right: 10px !important;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Theme transition */
+* {
+  @apply transition-colors duration-300;
 }

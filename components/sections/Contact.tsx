@@ -1,10 +1,11 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { Mail, MapPin, Phone, ExternalLink, Copy, Check } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import SectionHeader from "@/components/ui/section-header";
 
 const contactInfo = [
   {
@@ -13,24 +14,31 @@ const contactInfo = [
     details: "تهران، خیابان ولیعصر، مرکز خرید دیدار",
     link: "https://maps.google.com",
     linkText: "مشاهده در نقشه",
+    gradient: "from-blue-500 to-cyan-500",
+    darkGradient: "dark:from-blue-600 dark:to-cyan-600",
+    shadowColor: "shadow-blue-500/20",
   },
   {
     icon: Phone,
     title: "تلفن",
     details: "۰۲۱-۲۲۳۳۴۴۵۵",
     copyable: true,
+    gradient: "from-violet-500 to-purple-500",
+    darkGradient: "dark:from-violet-600 dark:to-purple-600",
+    shadowColor: "shadow-violet-500/20",
   },
   {
     icon: Mail,
     title: "ایمیل",
     details: "info@didar.com",
     copyable: true,
+    gradient: "from-amber-500 to-orange-500",
+    darkGradient: "dark:from-amber-600 dark:to-orange-600",
+    shadowColor: "shadow-amber-500/20",
   },
 ];
 
 export default function Contact() {
-  const { scrollYProgress } = useScroll();
-  const y = useTransform(scrollYProgress, [0, 1], ["0%", "25%"]);
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
   const handleCopy = async (text: string, field: string) => {
@@ -44,8 +52,8 @@ export default function Contact() {
   };
 
   return (
-    <section className="py-32 relative overflow-hidden">
-      <motion.div style={{ y }} className="absolute inset-0 -z-10">
+    <section className="section-padding relative overflow-hidden">
+      <div className="absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-b from-background via-primary/5 to-background" />
         <motion.div
           animate={{
@@ -53,7 +61,7 @@ export default function Contact() {
             rotate: [0, 45, 0],
           }}
           transition={{ duration: 25, repeat: Infinity }}
-          className="absolute top-1/4 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl"
+          className="absolute top-1/4 -right-40 w-[500px] h-[500px] bg-primary/10 rounded-full blur-3xl"
         />
         <motion.div
           animate={{
@@ -61,44 +69,15 @@ export default function Contact() {
             rotate: [0, -45, 0],
           }}
           transition={{ duration: 20, repeat: Infinity }}
-          className="absolute bottom-1/4 -left-40 w-96 h-96 bg-primary/20 rounded-full blur-3xl"
+          className="absolute bottom-1/4 -left-40 w-[500px] h-[500px] bg-primary/20 rounded-full blur-3xl"
         />
-      </motion.div>
+      </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        className="container mx-auto px-4"
-      >
-        <div className="text-center mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative inline-block mb-4"
-          >
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              تماس با ما
-            </h2>
-            <motion.div
-              className="absolute -inset-4 border border-primary/20 rounded-2xl -z-10"
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-            />
-          </motion.div>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.3 }}
-            className="text-muted-foreground"
-          >
-            در صورت نیاز به راهنمایی با ما در تماس باشید
-          </motion.p>
-        </div>
+      <div className="container relative">
+        <SectionHeader
+          title="تماس با ما"
+          description="در صورت نیاز به راهنمایی با ما در تماس باشید"
+        />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
           {contactInfo.map((item, index) => (
@@ -106,57 +85,71 @@ export default function Contact() {
               key={item.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.2 }}
+              transition={{ delay: index * 0.1 }}
               viewport={{ once: true }}
             >
-              <Card className="p-6 text-center h-full bg-card/50 backdrop-blur-sm border-primary/10 hover:border-primary/20 transition-all duration-500 hover:shadow-lg hover:shadow-primary/5">
-                <motion.div
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                  className="mb-4 inline-block"
-                >
-                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto">
-                    <item.icon className="w-8 h-8 text-primary" />
-                  </div>
-                </motion.div>
-                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                <p className="text-muted-foreground mb-4">{item.details}</p>
-                {item.link && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full w-full glass-hover"
-                    onClick={() => window.open(item.link, "_blank")}
+              <Card className="group relative overflow-hidden h-full bg-gradient-to-b from-background/50 to-background border-0 shadow-xl hover:shadow-2xl transition-all duration-500">
+                <div className="p-6 text-center">
+                  <motion.div
+                    whileHover={{ scale: 1.1, rotate: 5 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                    className="mb-6 inline-block"
                   >
-                    {item.linkText}
-                    <ExternalLink className="w-4 h-4 mr-2" />
-                  </Button>
-                )}
-                {item.copyable && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="rounded-full w-full glass-hover"
-                    onClick={() => handleCopy(item.details, item.title)}
+                    <div
+                      className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${item.gradient} ${item.darkGradient} ${item.shadowColor} p-3 shadow-lg mx-auto`}
+                    >
+                      <item.icon className="w-full h-full text-white" />
+                    </div>
+                  </motion.div>
+
+                  <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                  <p className="text-muted-foreground mb-6">{item.details}</p>
+
+                  {item.link && (
+                    <Button
+                      className={`rounded-full w-full bg-gradient-to-r ${item.gradient} ${item.darkGradient} border-0 ${item.shadowColor} hover:scale-105 transition-transform duration-300`}
+                      onClick={() => window.open(item.link, "_blank")}
+                    >
+                      {item.linkText}
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                    </Button>
+                  )}
+
+                  {item.copyable && (
+                    <Button
+                      variant="outline"
+                      className={`rounded-full w-full hover:bg-gradient-to-r hover:text-white ${item.gradient} ${item.darkGradient} transition-all duration-300 hover:scale-105 hover:border-transparent`}
+                      onClick={() => handleCopy(item.details, item.title)}
+                    >
+                      {copiedField === item.title ? (
+                        <>
+                          کپی شد
+                          <Check className="w-4 h-4 mr-2 text-green-500" />
+                        </>
+                      ) : (
+                        <>
+                          کپی کردن
+                          <Copy className="w-4 h-4 mr-2" />
+                        </>
+                      )}
+                    </Button>
+                  )}
+
+                  <motion.div
+                    className="absolute inset-0 pointer-events-none"
+                    initial={{ opacity: 0 }}
+                    whileHover={{ opacity: 0.1 }}
                   >
-                    {copiedField === item.title ? (
-                      <>
-                        کپی شد
-                        <Check className="w-4 h-4 mr-2 text-green-500" />
-                      </>
-                    ) : (
-                      <>
-                        کپی کردن
-                        <Copy className="w-4 h-4 mr-2" />
-                      </>
-                    )}
-                  </Button>
-                )}
+                    <div
+                      className={`absolute inset-0 bg-gradient-to-br ${item.gradient} ${item.darkGradient}`}
+                    />
+                  </motion.div>
+                </div>
               </Card>
             </motion.div>
           ))}
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
